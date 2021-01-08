@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "899174005274",
+    "project_id": "foodbuddy2",
+    "storage_bucket": "foodbuddy2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899174005274:android:b970d4e9f870c223b52fa3",
+        "android_client_info": {
+          "package_name": "com.example.foodbuddy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "899174005274-d11i0c85t95vm6rhrlllntu2m56u2s81.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkgTC94xxgn6_4P3XgQbJzV1LedeV4EY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "899174005274-d11i0c85t95vm6rhrlllntu2m56u2s81.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
