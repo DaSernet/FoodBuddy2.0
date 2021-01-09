@@ -23,7 +23,7 @@ public class Register extends AppCompatActivity {
     Button mRegisterButton;
     TextView mLoginButton;
     FirebaseAuth fAuth;
-    ProgressBar progressbar;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class Register extends AppCompatActivity {
         mLoginButton = findViewById(R.id.loginText);
 
         fAuth = FirebaseAuth.getInstance();
-        progressbar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar);
 
         //If user is already logged in send to main activity
         if(fAuth.getCurrentUser() != null){
@@ -64,7 +64,7 @@ public class Register extends AppCompatActivity {
                     return;
                 }
 
-                progressbar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
 
                 //firebase registration
                 fAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -76,6 +76,7 @@ public class Register extends AppCompatActivity {
 
                         } else{
                             Toast.makeText(Register.this, "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.INVISIBLE);
                         }
                     }
                 });
