@@ -19,7 +19,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Register extends AppCompatActivity {
-    EditText mFullName,mEmail,mPassword;
+    EditText mFullName,mEmail,mPassword,mPassword2;
     Button mRegisterButton;
     TextView mLoginButton;
     FirebaseAuth fAuth;
@@ -33,6 +33,7 @@ public class Register extends AppCompatActivity {
         mFullName = findViewById(R.id.fullName);
         mEmail = findViewById(R.id.email);
         mPassword = findViewById(R.id.password);
+        mPassword2 = findViewById(R.id.password2);
         mRegisterButton = findViewById(R.id.registerButton);
         mLoginButton = findViewById(R.id.loginText);
 
@@ -50,17 +51,33 @@ public class Register extends AppCompatActivity {
             public void onClick(View v) {
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
+                String password2 = mPassword2.getText().toString().trim();
+                String fullName = mFullName.getText().toString().trim();
 
                 if(password.length() < 8){
                     mPassword.setError("Password must be at least 8 characters");
+                    Toast.makeText(Register.this, "Password too short", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!doStringsMatch(password,password2)){
+                    mPassword.setError("Password don't match");
+                    mPassword2.setError("Passwords don't match");
+                    Toast.makeText(Register.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(TextUtils.isEmpty(fullName)){
+                    mEmail.setError("Your name cannot be empty!");
+                    Toast.makeText(Register.this, "Name is empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(TextUtils.isEmpty(email)){
                     mEmail.setError("Email cannot be empty!");
+                    Toast.makeText(Register.this, "Email is empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if(TextUtils.isEmpty(password)){
                     mPassword.setError("Password cannot be empty!");
+                    Toast.makeText(Register.this, "Password is empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -71,7 +88,7 @@ public class Register extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Toast.makeText(Register.this, "User registered.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Register.this, "User registered", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
 
                         } else{
@@ -89,5 +106,9 @@ public class Register extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),Login.class));
             }
         });
+    }
+
+    private boolean doStringsMatch(String string1, String string2){
+        return string1.equals(string2);
     }
 }
