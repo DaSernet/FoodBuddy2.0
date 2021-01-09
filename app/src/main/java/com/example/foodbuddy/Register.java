@@ -20,8 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Register extends AppCompatActivity {
     EditText mFullName,mEmail,mPassword;
-    Button mRegisterBtn;
-    TextView mLoginBtn;
+    Button mRegisterButton;
+    TextView mLoginButton;
     FirebaseAuth fAuth;
     ProgressBar progressbar;
 
@@ -33,8 +33,8 @@ public class Register extends AppCompatActivity {
         mFullName = findViewById(R.id.fullName);
         mEmail = findViewById(R.id.email);
         mPassword = findViewById(R.id.password);
-        mRegisterBtn = findViewById(R.id.registerButton);
-        mLoginBtn = findViewById(R.id.loginText);
+        mRegisterButton = findViewById(R.id.registerButton);
+        mLoginButton = findViewById(R.id.loginText);
 
         fAuth = FirebaseAuth.getInstance();
         progressbar = findViewById(R.id.progressBar);
@@ -45,7 +45,7 @@ public class Register extends AppCompatActivity {
             finish();
         }
 
-        mRegisterBtn.setOnClickListener(new View.OnClickListener() {
+        mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = mEmail.getText().toString().trim();
