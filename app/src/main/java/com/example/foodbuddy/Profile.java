@@ -21,6 +21,7 @@ public class Profile extends AppCompatActivity {
     FirebaseFirestore fStore;
     String userId;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +43,6 @@ public class Profile extends AppCompatActivity {
                 fullName.setText(documentSnapshot.getString("fullName"));
             }
         });
-
     }
 
     public void logout(View view){
