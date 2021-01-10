@@ -113,7 +113,7 @@ public class Register extends AppCompatActivity {
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.d(TAG,"Email not sent" + e.getMessage())
+                                    Log.d(TAG,"Email not sent" + e.getMessage());
                                 }
                             });
 

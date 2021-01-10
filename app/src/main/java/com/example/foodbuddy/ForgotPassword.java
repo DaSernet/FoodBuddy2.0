@@ -52,20 +52,16 @@ public class ForgotPassword extends AppCompatActivity {
                 fAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(ForgotPassword.this,"Reset link has been sent to your email",Toast.LENGTH_LONG).show();
-
-                        /*EditText resetMail = new EditText(v.getContext());
                         final AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
-                        passwordResetDialog.setTitle("Password reset request sucess");
+                        passwordResetDialog.setTitle("Password reset request success");
                         passwordResetDialog.setMessage("Please check your email for further instructions");
-                        passwordResetDialog.setView(resetMail);
                         passwordResetDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 startActivity(new Intent(getApplicationContext(),Login.class));
                             }
-                        });*/
-
+                        });
+                        passwordResetDialog.show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
