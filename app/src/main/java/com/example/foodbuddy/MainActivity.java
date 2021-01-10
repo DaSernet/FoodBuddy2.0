@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void logout(View view){
+    public void profile(View view){
         startActivity(new Intent(getApplicationContext(),Profile.class));
         finish();
     }
