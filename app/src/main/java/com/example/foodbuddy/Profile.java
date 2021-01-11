@@ -2,10 +2,12 @@ package com.example.foodbuddy;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,13 +25,18 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class Profile extends AppCompatActivity {
     TextView username,email;
-    FirebaseAuth fAuth;
-    FirebaseFirestore fStore;
     String userId;
     Button updateProfileButton, updatePasswordButton;
+    ImageView avatar;
+    FirebaseAuth fAuth;
+    FirebaseFirestore fStore;
+    StorageReference storageReference;
 
 
     //makes the back button work
@@ -54,13 +61,24 @@ public class Profile extends AppCompatActivity {
 
         username = findViewById(R.id.profileName);
         email = findViewById(R.id.profileEmail);
+        avatar = findViewById(R.id.profileAvatar);
         updateProfileButton = findViewById(R.id.updateProfileButton);
         updatePasswordButton = findViewById(R.id.updatePasswordButton);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         userId = fAuth.getCurrentUser().getUid();
+
+
+        StorageReference profileRef = storageReference.child("users/"+fAuth.getCurrentUser().getUid()+"/profile.jpg");
+        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(avatar);
+            }
+        });
 
         DocumentReference documentReference = fStore.collection("users").document(userId);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
@@ -86,27 +104,32 @@ public class Profile extends AppCompatActivity {
         updatePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fAuth.sendPasswordResetEmail(String.valueOf(email.getText())).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
                         final AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(v.getContext());
-                        passwordResetDialog.setTitle("Password update request success");
-                        passwordResetDialog.setMessage("Please check your email for further instructions");
-                        passwordResetDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        passwordResetDialog.setTitle("Password reset");
+                        passwordResetDialog.setMessage("Are u sure u want to reset your password?");
+                        passwordResetDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(Profile.this,"Update password email sent", Toast.LENGTH_LONG).show();
+                                fAuth.sendPasswordResetEmail(String.valueOf(email.getText())).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(Profile.this, "Update password email sent", Toast.LENGTH_LONG).show();
+                                    }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(Profile.this,"Password email not sent! Error: ", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
                             }
                         });
                         passwordResetDialog.show();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(Profile.this,"Password email not sent! Error: ", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
         });
 
         updateProfileButton.setOnClickListener(new View.OnClickListener() {
