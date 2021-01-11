@@ -11,8 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodBuddy">
-        <activity android:name=".ForgotPassword"/>
-        <activity android:name=".Profile"/>
+        <activity android:name=".AddRecipe"></activity>
+        <activity android:name=".ForgotPassword" />
+        <activity android:name=".Profile" />
         <activity android:name=".Login" />
         <activity android:name=".Register">
             <intent-filter>

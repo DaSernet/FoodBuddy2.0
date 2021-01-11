@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.addRecipeButton:
+                startActivity(new Intent(getApplicationContext(),AddRecipe.class));
+                finish();
                 return true;
             case R.id.searchRecipeButton:
                 return true;
