@@ -1,19 +1,18 @@
 package com.example.foodbuddy;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -26,7 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class Profile extends AppCompatActivity {
-    TextView fullName,email;
+    TextView username,email;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userId;
@@ -53,7 +52,7 @@ public class Profile extends AppCompatActivity {
         //back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        fullName = findViewById(R.id.profileName);
+        username = findViewById(R.id.profileName);
         email = findViewById(R.id.profileEmail);
         updateProfileButton = findViewById(R.id.updateProfileButton);
         updatePasswordButton = findViewById(R.id.updatePasswordButton);
@@ -68,12 +67,22 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
                 email.setText(documentSnapshot.getString("email"));
-                fullName.setText(documentSnapshot.getString("fullName"));
+                username.setText(documentSnapshot.getString("username"));
             }
         });
 
 
         final FirebaseUser fUser = fAuth.getCurrentUser();
+
+        updateProfileButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(),EditProfile.class);
+                i.putExtra("username","username");
+                i.putExtra("email","email");
+                startActivity(i);
+            }
+        });
         updatePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

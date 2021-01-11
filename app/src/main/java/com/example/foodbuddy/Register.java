@@ -1,8 +1,5 @@
 package com.example.foodbuddy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,6 +10,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,11 +27,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.perfmark.Tag;
-
 public class Register extends AppCompatActivity {
     public static final String TAG = "RegisterUser";
-    EditText mFullName,mEmail,mPassword,mPassword2;
+    EditText mUsername,mEmail,mPassword,mPassword2;
     Button mRegisterButton;
     TextView mLoginButton;
     FirebaseAuth fAuth;
@@ -44,7 +42,7 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mFullName = findViewById(R.id.fullName);
+        mUsername = findViewById(R.id.username);
         mEmail = findViewById(R.id.email);
         mPassword = findViewById(R.id.password);
         mPassword2 = findViewById(R.id.password2);
@@ -67,10 +65,10 @@ public class Register extends AppCompatActivity {
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
                 String password2 = mPassword2.getText().toString().trim();
-                String fullName = mFullName.getText().toString().trim();
+                String username = mUsername.getText().toString().trim();
 
-                if(password.length() < 8){
-                    mPassword.setError("Password must be at least 8 characters");
+                if(password.length() < 6){
+                    mPassword.setError("Password must be at least 6 characters");
                     Toast.makeText(Register.this, "Password too short", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -80,7 +78,7 @@ public class Register extends AppCompatActivity {
                     Toast.makeText(Register.this, "Passwords don't match", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(TextUtils.isEmpty(fullName)){
+                if(TextUtils.isEmpty(username)){
                     mEmail.setError("Your name cannot be empty!");
                     Toast.makeText(Register.this, "Name is empty", Toast.LENGTH_SHORT).show();
                     return;
@@ -126,7 +124,7 @@ public class Register extends AppCompatActivity {
 
                             //creating new user object
                             Map<String,Object> user = new HashMap<>();
-                            user.put("fullName",fullName);
+                            user.put("username",username);
                             user.put("email",email);
 
                             documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
