@@ -8,6 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,6 +23,37 @@ import com.google.firebase.auth.FirebaseUser;
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     FirebaseAuth fAuth;
+
+
+
+
+    //override our default actionbar with the custom one we made
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    //make our new menu options clickable
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.profileButton:
+                startActivity(new Intent(getApplicationContext(),Profile.class));
+                finish();
+                return true;
+            case R.id.addRecipeButton:
+                return true;
+            case R.id.searchRecipeButton:
+                return true;
+            case R.id.filterFavouriteButton:
+                return true;
+            case R.id.filterAllergyButton:
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +96,5 @@ public class MainActivity extends AppCompatActivity {
             });
             verifyEmailDialog.show();
         }
-    }
-
-    public void profile(View view){
-        startActivity(new Intent(getApplicationContext(),Profile.class));
-        finish();
     }
 }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/profileButton"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile page"
+        app:showAsAction="ifRoom"/>
+    <item android:id="@+id/searchRecipeButton"
+        android:icon="@drawable/ic_search"
+        android:title="Search recipe"
+        app:showAsAction="ifRoom"/>
+    <item android:id="@+id/addRecipeButton"
+        android:title="Add recipe"
+        app:showAsAction="never"/>
+    <item android:id="@+id/filterBy"
+        android:title="Filter by"
+        app:showAsAction="never">
+        <menu>
+            <item android:id="@+id/filterFavouriteButton"
+                android:title="Favourite"
+                app:showAsAction="never"/>
+            <item android:id="@+id/filterAllergyButton"
+                android:title="No allergies"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+</menu>
