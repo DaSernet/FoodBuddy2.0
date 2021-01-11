@@ -1,9 +1,5 @@
 package com.example.foodbuddy;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +7,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -77,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
             verifyEmailDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
+                    startActivity(new Intent(getApplicationContext(),Login.class));
+                    FirebaseAuth.getInstance().signOut();
+                    finish();
                 }
             });
             verifyEmailDialog.setNegativeButton("Resend code", new DialogInterface.OnClickListener() {
@@ -87,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(Void aVoid) {
                             Toast.makeText(MainActivity.this,"Verification email sent", Toast.LENGTH_LONG).show();
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(getApplicationContext(),Login.class));
+                            finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
