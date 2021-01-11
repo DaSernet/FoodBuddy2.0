@@ -108,9 +108,20 @@ public class Profile extends AppCompatActivity {
                 });
             }
         });
+
+        updateProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(),EditProfile.class);
+                i.putExtra("username",username.getText().toString());
+                i.putExtra("email",email.getText().toString());
+                startActivity(i);
+            }
+        });
     }
 
     public void logout(View view){
+        onStop();
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getApplicationContext(),Login.class));
         finish();

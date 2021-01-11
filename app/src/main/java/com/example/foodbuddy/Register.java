@@ -79,7 +79,7 @@ public class Register extends AppCompatActivity {
                     return;
                 }
                 if(TextUtils.isEmpty(username)){
-                    mEmail.setError("Your name cannot be empty!");
+                    mEmail.setError("Your username cannot be empty!");
                     Toast.makeText(Register.this, "Name is empty", Toast.LENGTH_SHORT).show();
                     return;
                 }
