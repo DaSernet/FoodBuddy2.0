@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.foodbuddy.model.Adapter;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     FirebaseAuth fAuth;
     Adapter adapter;
-    private RecyclerView recipeLists;
+    RecyclerView recipeLists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +55,9 @@ public class MainActivity extends AppCompatActivity {
         description.add("who doesn't love fries?");
         favourite.add(false);
 
-        /*adapter = new Adapter(name,description,favourite);
+        adapter = new Adapter(name,description,favourite);
         recipeLists.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
-        recipeLists.setAdapter(adapter);*/
+        recipeLists.setAdapter(adapter);
     }
 
     private void checkLoginState(FirebaseAuth fAuth) {
