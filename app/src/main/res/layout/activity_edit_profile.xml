@@ -24,7 +24,7 @@
         android:layout_width="120dp"
         android:layout_height="123dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/avatardefault"
+        android:background="@drawable/ic_account_box_32"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,9 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AddRecipe extends AppCompatActivity {
 
-    EditText mRecipeName,mDuration,mIngredients,mInstructions;
-    Button mRegisterButton;
-    TextView mLoginButton;
+    EditText mRecipeName,mDuration,mDescription;
     FirebaseAuth fAuth;
     ProgressBar progressBar;
     FirebaseFirestore fStore;

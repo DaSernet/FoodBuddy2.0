@@ -11,25 +11,29 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodBuddy">
-        <activity android:name=".EditProfile"></activity>
+        <activity
+            android:name=".RecipeDetails"
+            android:label="@string/title_activity_recipe_details"
+            android:theme="@style/Theme.FoodBuddy.NoActionBar" />
+        <activity android:name=".EditProfile" />
         <activity android:name=".AddRecipe" />
         <activity android:name=".ForgotPassword" />
         <activity android:name=".Profile" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Login">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".Register"/>
-
-
+        <activity android:name=".Register" />
     </application>
 
 </manifest>

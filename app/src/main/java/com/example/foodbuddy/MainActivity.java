@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.content_main);
 
         recipeLists = findViewById(R.id.recipelist);
 
@@ -46,16 +46,19 @@ public class MainActivity extends AppCompatActivity {
         List<String> name = new ArrayList<>();
         List<String> description = new ArrayList<>();
         List<Boolean> favourite = new ArrayList<>();
+        List<String> duration = new ArrayList<>();
 
         name.add("Spaghetti");
         description.add("Strings of spaghetti");
         favourite.add(true);
+        duration.add("1:30");
 
         name.add("Fries");
         description.add("who doesn't love fries?");
         favourite.add(false);
+        duration.add("1:00");
 
-        adapter = new Adapter(name,description,favourite);
+        adapter = new Adapter(name,description,favourite,duration);
         recipeLists.setLayoutManager(new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL));
         recipeLists.setAdapter(adapter);
     }

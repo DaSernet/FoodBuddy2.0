@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/recipeCard"
@@ -14,7 +15,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        app:cardBackgroundColor="#7B1FA2"
+        app:cardBackgroundColor="#6200EE"
         app:cardCornerRadius="0dp"
         app:cardElevation="5dp"
         app:contentPadding="0dp"
@@ -33,13 +34,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:padding="5dp"
                 android:text="TextView"
                 android:textAlignment="viewStart"
-                android:textColor="#000"
+                android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 android:textStyle="normal|italic"
                 app:layout_constraintBottom_toTopOf="@+id/cardView"
