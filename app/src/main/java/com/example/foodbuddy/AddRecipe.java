@@ -5,50 +5,92 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class AddRecipe extends AppCompatActivity {
 
-    EditText mRecipeName,mDuration,mDescription;
+    EditText mRecipeName,mRecipeDuration,mRecipeDescription;
+    ToggleButton mFavouriteButton;
     FirebaseAuth fAuth;
     ProgressBar progressBar;
     FirebaseFirestore fStore;
     String userID;
+    Button mAddRecipeButton;
     private int recipeDurationHours;
     private int recipeDurationMinutes;
-
-
-    //makes the back button work
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home:
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
-
-        //back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mDuration = findViewById(R.id.recipeDuration);
-        mDuration.setOnClickListener(v -> onClickDurationButton());
+        fStore = FirebaseFirestore.getInstance();
+
+        mRecipeDuration = findViewById(R.id.addRecipeDuration);
+        mAddRecipeButton = findViewById(R.id.addRecipeButton);
+        mRecipeName = findViewById(R.id.addRecipeName);
+        mRecipeDescription = findViewById(R.id.addRecipeDescription);
+        mFavouriteButton = findViewById(R.id.addRecipeFavourite);
+
+        mRecipeDuration.setOnClickListener(v -> onClickDurationButton());
+
+        mAddRecipeButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                String rName = mRecipeName.getText().toString();
+                String rDescription = mRecipeDescription.getText().toString();
+                String rDuration = mRecipeDuration.getText().toString();
+                Boolean rFavourite = mFavouriteButton.isChecked();
+
+                if(rName.isEmpty() || rDescription.isEmpty() || rDuration.isEmpty()){
+                    Toast.makeText(AddRecipe.this,"Input all fields please",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //Save recipe to firebase
+                DocumentReference docref = fStore.collection("recipes").document();
+                Map<String,Object> recipe = new HashMap<>();
+                recipe.put("name",rName);
+                recipe.put("duration",rDuration);
+                recipe.put("description",rDescription);
+                recipe.put("Favourite",rFavourite);
+
+                docref.set(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                        finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(AddRecipe.this,"An error occurred",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
+
+
 
     private void onClickDurationButton() {
         final ConstraintLayout constraintLayout = (ConstraintLayout) getLayoutInflater().inflate(R.layout.view_time_dialog, null);
@@ -74,8 +116,19 @@ public class AddRecipe extends AppCompatActivity {
             recipeDurationHours = RecipeDurationHourNumberPicker.getValue();
             int pickedTime = RecipeDurationMinuteNumberPicker.getValue();
             recipeDurationMinutes = Integer.parseInt(data[pickedTime - 1]);
-            mDuration.setText("H " + recipeDurationHours + " : " + recipeDurationMinutes);
+            mRecipeDuration.setText(recipeDurationHours + " : " + recipeDurationMinutes);
             builder.dismiss();
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

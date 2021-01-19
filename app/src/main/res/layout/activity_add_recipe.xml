@@ -8,7 +8,7 @@
     tools:context=".AddRecipe">
 
     <EditText
-        android:id="@+id/recipeInstructions"
+        android:id="@+id/addRecipeDescription"
         android:layout_width="0dp"
         android:layout_height="250dp"
         android:layout_marginStart="16dp"
@@ -18,14 +18,14 @@
         android:backgroundTint="@color/white"
         android:ems="10"
         android:hint="Instructions?"
-        android:inputType="textLongMessage"
+        android:inputType="textMultiLine"
         android:padding="5dp"
         android:textAlignment="center"
         android:textColorHint="?android:attr/textColorHint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipeDuration" />
+        app:layout_constraintTop_toBottomOf="@+id/addRecipeDuration" />
 
     <TextView
         android:id="@+id/textView"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/recipeName"
+        android:id="@+id/addRecipeName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -63,7 +63,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/recipeDuration"
+        android:id="@+id/addRecipeDuration"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -81,7 +81,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recipeName" />
+        app:layout_constraintTop_toBottomOf="@id/addRecipeName" />
 
     <Button
         android:id="@+id/addRecipeButton"
@@ -93,9 +93,9 @@
         android:text="Add recipe"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recipeInstructions" />
+        app:layout_constraintTop_toBottomOf="@+id/addRecipeFavourite" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -108,5 +108,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addRecipeButton" />
+
+    <ToggleButton
+        android:id="@+id/addRecipeFavourite"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="ToggleButton"
+        android:textOff="FAVOURITE"
+        android:textOn="UNFAVOURITE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addRecipeDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
