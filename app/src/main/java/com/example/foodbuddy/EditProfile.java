@@ -150,7 +150,7 @@ public class EditProfile extends AppCompatActivity {
                     uploadImageToFirebase(imageUri);
                 }
                 Toast.makeText(EditProfile.this, "Profile updated", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(),Profile.class));
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
                 finish();
             }
         });
