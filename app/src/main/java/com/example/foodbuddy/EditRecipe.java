@@ -18,66 +18,80 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddRecipe extends AppCompatActivity {
-
-    EditText mRecipeName,mRecipeDuration,mRecipeDescription;
-    ToggleButton mFavouriteButton;
-    FirebaseAuth fAuth;
-    ProgressBar mRecipeProgressBar;
+public class EditRecipe extends AppCompatActivity {
+    Intent data;
+    EditText editRecipeDescription,editRecipeName,editRecipeDuration;
+    ToggleButton editRecipeFavourite;
     FirebaseFirestore fStore;
-    String userID;
-    Button mAddRecipeButton;
+    Button editRecipeButton;
+    ProgressBar editRecipeProgressBar;
     private int recipeDurationHours;
     private int recipeDurationMinutes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_recipe);
+        setContentView(R.layout.activity_edit_recipe);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        fStore = FirebaseFirestore.getInstance();
+        fStore = fStore.getInstance();
 
-        mRecipeDuration = findViewById(R.id.addRecipeDuration);
-        mAddRecipeButton = findViewById(R.id.addRecipeButton);
-        mRecipeName = findViewById(R.id.addRecipeName);
-        mRecipeDescription = findViewById(R.id.addRecipeDescription);
-        mFavouriteButton = findViewById(R.id.addRecipeFavourite);
-        mRecipeProgressBar = findViewById(R.id.addRecipeProgressBar);
+        data = getIntent();
 
-        mRecipeDuration.setOnClickListener(v -> onClickDurationButton());
+        editRecipeDescription = findViewById(R.id.editRecipeDescription);
+        editRecipeDuration = findViewById(R.id.editRecipeDuration);
+        editRecipeName = findViewById(R.id.editRecipeName);
+        editRecipeFavourite = findViewById(R.id.editRecipeFavourite);
+        editRecipeButton = findViewById(R.id.editRecipeButton);
+        editRecipeProgressBar = findViewById(R.id.editRecipeProgressBar);
 
-        mAddRecipeButton.setOnClickListener(new View.OnClickListener(){
+
+
+
+        String recipeName = data.getStringExtra("name");
+        String recipeDescription = data.getStringExtra("description");
+        String recipeDuration = data.getStringExtra("duration");
+        Boolean recipeFavourite = data.getBooleanExtra("favourite",false);
+
+
+        editRecipeDescription.setText(recipeDescription);
+        editRecipeDuration.setText(recipeDuration);
+        editRecipeName.setText(recipeName);
+        editRecipeFavourite.setChecked(recipeFavourite);
+
+        editRecipeDuration.setOnClickListener(v -> onClickDurationButton());
+
+        editRecipeButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                String rName = mRecipeName.getText().toString();
-                String rDescription = mRecipeDescription.getText().toString();
-                String rDuration = mRecipeDuration.getText().toString();
-                Boolean rFavourite = mFavouriteButton.isChecked();
+                String rName = editRecipeName.getText().toString();
+                String rDescription = editRecipeDescription.getText().toString();
+                String rDuration = editRecipeDuration.getText().toString();
+                Boolean rFavourite = editRecipeFavourite.isChecked();
 
                 if(rName.isEmpty() || rDescription.isEmpty() || rDuration.isEmpty()){
-                    Toast.makeText(AddRecipe.this,"Input all fields please",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditRecipe.this,"Input all fields please",Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                mRecipeProgressBar.setVisibility(View.VISIBLE);
+                editRecipeProgressBar.setVisibility(View.VISIBLE);
 
-                //Save recipe to firebase
-                DocumentReference docref = fStore.collection("recipes").document();
+                //update recipe in firebase
+                DocumentReference docref = fStore.collection("recipes").document(data.getStringExtra("recipeId"));
+
                 Map<String,Object> recipe = new HashMap<>();
                 recipe.put("name",rName);
                 recipe.put("duration",rDuration);
                 recipe.put("description",rDescription);
                 recipe.put("favourite",rFavourite);
 
-                docref.set(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
+                docref.update(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         startActivity(new Intent(getApplicationContext(),MainActivity.class));
@@ -86,14 +100,13 @@ public class AddRecipe extends AppCompatActivity {
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AddRecipe.this,"An error occurred",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditRecipe.this,"An error occurred",Toast.LENGTH_SHORT).show();
+                        editRecipeProgressBar.setVisibility(View.VISIBLE);
                     }
                 });
             }
         });
     }
-
-
 
     private void onClickDurationButton() {
         final ConstraintLayout constraintLayout = (ConstraintLayout) getLayoutInflater().inflate(R.layout.view_time_dialog, null);
@@ -101,10 +114,10 @@ public class AddRecipe extends AppCompatActivity {
         com.shawnlin.numberpicker.NumberPicker RecipeDurationMinuteNumberPicker = (com.shawnlin.numberpicker.NumberPicker) constraintLayout.findViewById(R.id.RecipeDurationMinuteNumberPicker);
 
         RecipeDurationHourNumberPicker.setValue(0);
-        String[] data = {"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"};
+        String[] minutes = {"00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55"};
         RecipeDurationMinuteNumberPicker.setMinValue(1);
-        RecipeDurationMinuteNumberPicker.setMaxValue(data.length);
-        RecipeDurationMinuteNumberPicker.setDisplayedValues(data);
+        RecipeDurationMinuteNumberPicker.setMaxValue(minutes.length);
+        RecipeDurationMinuteNumberPicker.setDisplayedValues(minutes);
 
         final AlertDialog builder = new AlertDialog.Builder(this)
                 .setTitle("Total cooking duration")
@@ -119,13 +132,13 @@ public class AddRecipe extends AppCompatActivity {
             String recipeDurationMinutesString;
             recipeDurationHours = RecipeDurationHourNumberPicker.getValue();
             int pickedTime = RecipeDurationMinuteNumberPicker.getValue();
-            recipeDurationMinutes = Integer.parseInt(data[pickedTime - 1]);
+            recipeDurationMinutes = Integer.parseInt(minutes[pickedTime - 1]);
             if(recipeDurationMinutes < 10) {
                 recipeDurationMinutesString = "0" + recipeDurationMinutes;
             } else {
                 recipeDurationMinutesString = String.valueOf(recipeDurationMinutes);
             }
-            mRecipeDuration.setText(recipeDurationHours + " : " + recipeDurationMinutesString);
+            editRecipeDuration.setText(recipeDurationHours + " : " + recipeDurationMinutesString);
             builder.dismiss();
         });
     }

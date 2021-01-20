@@ -12,9 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 public class RecipeDetails extends AppCompatActivity {
+    Intent data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class RecipeDetails extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
-        Intent data = getIntent();
+        data = getIntent();
 
         TextView description = findViewById(R.id.recipeDetailsDescription);
         TextView name = findViewById(R.id.recipeDetailsName);
@@ -48,8 +48,13 @@ public class RecipeDetails extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent i = new Intent(view.getContext(),EditRecipe.class);
+                i.putExtra("name",data.getStringExtra("name"));
+                i.putExtra("description",data.getStringExtra("description"));
+                i.putExtra("favourite",data.getBooleanExtra("favourite",false));
+                i.putExtra("duration",data.getStringExtra("duration"));
+                i.putExtra("recipeId",data.getStringExtra("recipeId"));
+                view.getContext().startActivity(i);
             }
         });
     }

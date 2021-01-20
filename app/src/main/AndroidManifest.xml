@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FoodBuddy">
+        <activity android:name=".EditRecipe"></activity>
         <activity
             android:name=".RecipeDetails"
             android:label="@string/title_activity_recipe_details"

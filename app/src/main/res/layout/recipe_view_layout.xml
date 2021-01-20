@@ -30,7 +30,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/recipeDescriptionCard"
+                android:id="@+id/recipeDurationCard"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
