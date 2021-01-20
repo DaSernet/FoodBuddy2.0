@@ -18,6 +18,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -31,6 +33,7 @@ public class EditRecipe extends AppCompatActivity {
     FirebaseFirestore fStore;
     Button editRecipeButton;
     ProgressBar editRecipeProgressBar;
+    FirebaseUser fUser;
     private int recipeDurationHours;
     private int recipeDurationMinutes;
 
@@ -41,6 +44,7 @@ public class EditRecipe extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fStore = fStore.getInstance();
+        fUser = FirebaseAuth.getInstance().getCurrentUser();
 
         data = getIntent();
 
@@ -83,7 +87,7 @@ public class EditRecipe extends AppCompatActivity {
                 editRecipeProgressBar.setVisibility(View.VISIBLE);
 
                 //update recipe in firebase
-                DocumentReference docref = fStore.collection("recipes").document(data.getStringExtra("recipeId"));
+                DocumentReference docref = fStore.collection("recipes").document(fUser.getUid()).collection("myrecipes").document(data.getStringExtra("recipeId"));
 
                 Map<String,Object> recipe = new HashMap<>();
                 recipe.put("name",rName);

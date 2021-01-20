@@ -2,8 +2,10 @@ package com.example.foodbuddy;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,10 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +31,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         checkLoginState(fAuth);
         checkEmailVerification(fUser);
 
-        Query query = fStore.collection("recipes").orderBy("name",Query.Direction.DESCENDING);
+        Query query = fStore.collection("recipes").document(fUser.getUid()).collection("myrecipes").orderBy("name",Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<Recipe> allRecipes = new FirestoreRecyclerOptions.Builder<Recipe>()
                 .setQuery(query,Recipe.class)
@@ -79,6 +84,51 @@ public class MainActivity extends AppCompatActivity {
                         i.putExtra("favourite",recipe.getFavourite());
                         i.putExtra("duration",recipe.getDuration());
                         v.getContext().startActivity(i);
+                    }
+                });
+
+                ImageView menuIcon = recipeViewHolder.view.findViewById(R.id.menuIcon);
+                menuIcon.setOnClickListener(new View.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
+                    @Override
+                    public void onClick(View v) {
+                        final String docId = recipeAdapter.getSnapshots().getSnapshot(i).getId();
+                        PopupMenu menu = new PopupMenu(v.getContext(),v);
+                        menu.setGravity(Gravity.END);
+                        menu.getMenu().add("Edit").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                Intent i = new Intent(v.getContext(), EditRecipe.class);
+                                i.putExtra("recipeId",docId);
+                                i.putExtra("name",recipe.getName());
+                                i.putExtra("description",recipe.getDescription());
+                                i.putExtra("favourite",recipe.getFavourite());
+                                i.putExtra("duration",recipe.getDuration());
+                                v.getContext().startActivity(i);
+                                return false;
+                            }
+                        });
+
+                        menu.getMenu().add("Delete").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                DocumentReference docRef = fStore.collection("recipes").document(docId);
+                                docRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(MainActivity.this, "Recipe deleted", Toast.LENGTH_SHORT).show();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(MainActivity.this, "Error deleting recipe", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                return false;
+                            }
+                        });
+
+                        menu.show();
                     }
                 });
             }

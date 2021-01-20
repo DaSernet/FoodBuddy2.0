@@ -19,6 +19,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -32,7 +33,7 @@ public class AddRecipe extends AppCompatActivity {
     FirebaseAuth fAuth;
     ProgressBar mRecipeProgressBar;
     FirebaseFirestore fStore;
-    String userID;
+    FirebaseUser fUser;
     Button mAddRecipeButton;
     private int recipeDurationHours;
     private int recipeDurationMinutes;
@@ -44,6 +45,7 @@ public class AddRecipe extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fStore = FirebaseFirestore.getInstance();
+        fUser = fAuth.getInstance().getCurrentUser();
 
         mRecipeDuration = findViewById(R.id.addRecipeDuration);
         mAddRecipeButton = findViewById(R.id.addRecipeButton);
@@ -70,7 +72,7 @@ public class AddRecipe extends AppCompatActivity {
                 mRecipeProgressBar.setVisibility(View.VISIBLE);
 
                 //Save recipe to firebase
-                DocumentReference docref = fStore.collection("recipes").document();
+                DocumentReference docref = fStore.collection("recipes").document(fUser.getUid()).collection("myrecipes").document();
                 Map<String,Object> recipe = new HashMap<>();
                 recipe.put("name",rName);
                 recipe.put("duration",rDuration);
